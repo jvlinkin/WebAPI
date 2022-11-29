@@ -39,6 +39,37 @@ namespace ProjectName.Controllers
             var dados = await dc.pessoa.ToListAsync();
             return Ok(dados);
         }
+        //Rota com parêmetros.
+        [HttpGet("api/{id}")]
+        public Pessoa filtrar(int id)
+        {
+            Pessoa p = dc.pessoa.Find(id);
+            return p;
+        } 
+
+        //Método Put
+        [HttpPut("api")]
+
+        public async Task<ActionResult> editar([FromBody] Pessoa p)
+        {
+            dc.pessoa.Update(p);
+            await dc.SaveChangesAsync();
+            return Ok(p);
+        }
+        [HttpDelete("api/{id}")]
+
+        public async Task<ActionResult> remover(int id)
+        {
+            Pessoa p = filtrar(id);
+
+            if(p == null){
+                return NotFound();
+            }else{
+                dc.pessoa.Remove(p);
+                await dc.SaveChangesAsync();
+                return Ok();
+            }
+        }
 
         [HttpGet("oi")]
         public string oi(){
