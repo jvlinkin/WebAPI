@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ProjectName.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectName
 {
@@ -26,6 +28,11 @@ namespace ProjectName
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            // Início conexão com o banco de dados   
+            string stringDeConexao = Configuration.GetConnectionString("conexaoMySQL");
+
+            services.AddDbContext<DataContext>(opt => opt.UseMySql(stringDeConexao, ServerVersion.AutoDetect(stringDeConexao)));
+            // Término da conexão com o banco de dados
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
