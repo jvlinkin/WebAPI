@@ -13,6 +13,33 @@ namespace ProjectName.Controllers
     [Route("[controller]")]
     public class PessoaController : ControllerBase
     {
+        private DataContext dc;
+
+        //Construtor
+        public PessoaController(DataContext context)
+        {
+         dc = context;
+        }
+
+        //Rota Post
+        [HttpPost("api")]
+        public async Task<ActionResult> cadastrar([FromBody] Pessoa p)
+        {
+            dc.pessoa.Add(p);
+            
+            
+            await dc.SaveChangesAsync();
+
+            return Created("Objeto Pessoa", p);
+        }
+
+        [HttpGet("api")]
+        public async Task<ActionResult> listar()
+        {
+            var dados = await dc.pessoa.ToListAsync();
+            return Ok(dados);
+        }
+
         [HttpGet("oi")]
         public string oi(){
             return "Hello World";
